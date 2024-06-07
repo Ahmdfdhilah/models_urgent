@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 # Baca dataset
-data = pd.read_csv('../Dataset.csv')
+data = pd.read_csv('./Dataset.csv')
 
 # Pisahkan fitur dan label
 X = data['Details']
