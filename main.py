@@ -1,15 +1,13 @@
-# api/main.py
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, accuracy_score
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 # Baca dataset
-data = pd.read_csv('./Dataset.csv')
+data = pd.read_csv('./Dataset.csv', sep=';')
 
 # Pisahkan fitur dan label
 X = data['Details']
@@ -23,14 +21,17 @@ vectorizer = TfidfVectorizer()
 X_train_tfidf = vectorizer.fit_transform(X_train)
 X_test_tfidf = vectorizer.transform(X_test)
 
-# Buat dan latih model
+# Create and train the model
 model = LogisticRegression()
 model.fit(X_train_tfidf, y_train)
 
-# Prediksi dan evaluasi model
 y_pred = model.predict(X_test_tfidf)
-print(classification_report(y_test, y_pred))
+report = classification_report(y_test, y_pred)
+accuracy = accuracy_score(y_test, y_pred)
 
+print("Model Evaluation:")
+print(report)
+print(f"Accuracy Score: {accuracy}")
 app = FastAPI()
 
 class Item(BaseModel):
